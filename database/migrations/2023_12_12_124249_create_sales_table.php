@@ -17,7 +17,6 @@ return new class extends Migration
             $table->integer('quantity');
             $table->decimal('cost', 8, 2);
             $table->decimal('selling_price', 8, 2);
-            $table->timestamp('sold_at');
             $table->timestamps();
         });
     }

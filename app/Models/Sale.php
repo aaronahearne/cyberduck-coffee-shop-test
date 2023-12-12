@@ -10,6 +10,7 @@ class Sale extends Model
     use HasFactory;
 
     const SALE_PROFIT_MARGIN = 0.25;
+
     const SALE_SHIPPING_COST = 10.00;
 
     protected $fillable = [
@@ -17,6 +18,5 @@ class Sale extends Model
         'quantity',
         'cost',
         'selling_price',
-        'sold_at',
     ];
 }

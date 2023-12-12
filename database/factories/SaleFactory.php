@@ -21,7 +21,6 @@ class SaleFactory extends Factory
             'quantity' => fake()->numberBetween(1, 10),
             'cost' => fake()->randomFloat(2, 1, 100),
             'selling_price' => fake()->randomFloat(2, 1, 100),
-            'sold_at' => fake()->dateTimeBetween('-1 year', 'now')
         ];
     }
 }
