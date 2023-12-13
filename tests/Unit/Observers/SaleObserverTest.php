@@ -2,6 +2,8 @@
 
 namespace Tests\Unit\Observers;
 
+use App\Exceptions\MissingAttributeForCalculationException;
+use App\Models\Coffee;
 use App\Models\Sale;
 use App\Observers\SaleObserver;
 use App\Services\SaleService;
@@ -25,8 +27,57 @@ class SaleObserverTest extends TestCase
         $this->saleObserver = new SaleObserver($this->mockSaleService);
     }
 
-    /** @test */
-    public function it_calculates_cost_and_selling_price_when_creating_sale()
+    public function test_creating_without_coffee_throws_error()
+    {
+        $sale = Sale::factory()->make([
+            'coffee_id' => null,
+        ]);
+
+        $this->expectException(MissingAttributeForCalculationException::class);
+        $this->expectExceptionMessage('Missing attribute required for calculation: coffee');
+
+        $this->saleObserver->creating($sale);
+    }
+
+    public function test_creating_without_sale_quantity_throws_error()
+    {
+        $sale = Sale::factory()->make([
+            'quantity' => null,
+        ]);
+
+        $this->expectException(MissingAttributeForCalculationException::class);
+        $this->expectExceptionMessage('Missing attribute required for calculation: quantity');
+
+        $this->saleObserver->creating($sale);
+    }
+
+    public function test_creating_without_sale_unit_cost_throws_error()
+    {
+        $sale = Sale::factory()->make([
+            'unit_cost' => null,
+        ]);
+
+        $this->expectException(MissingAttributeForCalculationException::class);
+        $this->expectExceptionMessage('Missing attribute required for calculation: unit_cost');
+
+        $this->saleObserver->creating($sale);
+    }
+
+    public function test_creating_without_coffee_profit_margin_throws_error()
+    {
+        $coffee = Coffee::factory()->make([
+            'profit_margin' => null,
+        ]);
+        $sale = Sale::factory()->make();
+        $sale->coffee()->associate($coffee);
+
+        $this->expectException(MissingAttributeForCalculationException::class);
+        $this->expectExceptionMessage('Missing attribute required for calculation: coffee profit_margin');
+
+        $this->saleObserver->creating($sale);
+    }
+
+    public function test_creating_calculates_cost_and_selling_price_when_creating_sale()
     {
         $sale = Sale::factory()->make([
             'quantity' => 5,
@@ -45,12 +96,12 @@ class SaleObserverTest extends TestCase
 
         $this->mockSaleService->shouldReceive('calculateSellingPrice')
             ->once()
-            ->with($expected['cost'], Sale::SALE_PROFIT_MARGIN, Sale::SALE_SHIPPING_COST)
+            ->with($expected['cost'], $sale->coffee->profit_margin, Sale::SALE_SHIPPING_COST)
             ->andReturn($expected['selling_price']);
 
         $this->saleObserver->creating($sale);
 
-        $this->assertEquals($expected['cost'], $sale->cost); // Adjust this based on your expected value
-        $this->assertEquals($expected['selling_price'], $sale->selling_price); // Adjust this based on your expected value
+        $this->assertEquals($expected['cost'], $sale->cost);
+        $this->assertEquals($expected['selling_price'], $sale->selling_price);
     }
 }

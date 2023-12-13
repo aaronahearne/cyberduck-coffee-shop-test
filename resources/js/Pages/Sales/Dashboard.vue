@@ -9,7 +9,9 @@ defineProps({
     sales: {
         type: Array,
     },
-    errors: Object
+    coffees: {
+        type: Array,
+    },
 });
 </script>
 
@@ -22,7 +24,7 @@ defineProps({
         </template>
 
         <Card>
-            <SaleForm :errors="errors"/>
+            <SaleForm :coffees="coffees"/>
         </Card>
 
         <Card>

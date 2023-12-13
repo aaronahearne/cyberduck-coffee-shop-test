@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Exceptions\MissingAttributeForCalculationException;
 use App\Models\Sale;
 use App\Services\SaleService;
 
@@ -19,7 +20,19 @@ class SaleObserver
      */
     public function creating(Sale $sale): void
     {
-        // Use the SaleService to calculate cost and selling price
+        $requiredAttributes = ['coffee', 'quantity', 'unit_cost'];
+
+        foreach ($requiredAttributes as $attribute) {
+            if (empty($sale->$attribute)) {
+                throw new MissingAttributeForCalculationException($attribute);
+            }
+        }
+
+        if (empty($sale->coffee->profit_margin)) {
+            throw new MissingAttributeForCalculationException('coffee profit_margin');
+        }
+
+        // Use the SaleService to calculate cost
         $sale->cost = $this->saleService->calculateCost(
             $sale->quantity,
             $sale->unit_cost,
@@ -28,7 +41,7 @@ class SaleObserver
         // Assign the calculated values to the Sale model
         $sale->selling_price = $this->saleService->calculateSellingPrice(
             $sale->cost,
-            Sale::SALE_PROFIT_MARGIN,
+            $sale->coffee->profit_margin,
             Sale::SALE_SHIPPING_COST,
         );
     }

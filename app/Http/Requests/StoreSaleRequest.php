@@ -24,6 +24,7 @@ class StoreSaleRequest extends FormRequest
         return [
             'quantity' => 'required|integer|min:1',
             'unit_cost' => 'required|numeric|min:0',
+            'coffee_id' => 'required|integer|exists:coffees,id',
         ];
     }
 }

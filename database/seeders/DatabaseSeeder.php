@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Sale;
-use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,11 +11,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()->create([
-            'name' => 'Sales Agent',
-            'email' => 'sales@coffee.shop',
+        $this->call([
+            UserSeeder::class,
+            CoffeeSeeder::class,
+            SalesSeeder::class,
         ]);
-
-        Sale::factory()->count(10)->create();
     }
 }

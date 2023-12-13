@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
-            $table->decimal('unit_cost', 8, 2);
-            $table->integer('quantity');
-            $table->decimal('cost', 8, 2);
-            $table->decimal('selling_price', 8, 2);
+            $table->unsignedDecimal('unit_cost');
+            $table->unsignedInteger('quantity');
+            $table->unsignedDecimal('cost');
+            $table->unsignedDecimal('selling_price');
             $table->timestamps();
         });
     }

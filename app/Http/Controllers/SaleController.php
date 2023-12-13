@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreSaleRequest;
+use App\Models\Coffee;
 use App\Models\Sale;
 use App\Services\SaleService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
@@ -18,8 +20,10 @@ class SaleController extends Controller
 
     public function index(): Response
     {
+
         return Inertia::render('Sales/Dashboard', [
-            'sales' => Sale::all(),
+            'sales' => Sale::with('coffee')->get(),
+            'coffees' => Coffee::all(),
         ]);
     }
 
@@ -35,7 +39,7 @@ class SaleController extends Controller
         ]);
     }
 
-    public function calculate(StoreSaleRequest $request)
+    public function calculate(StoreSaleRequest $request): JsonResponse
     {
         $sale = Sale::make($request->validated());
 
@@ -46,7 +50,7 @@ class SaleController extends Controller
 
         $sale->selling_price = $this->saleService->calculateSellingPrice(
             $sale->cost,
-            Sale::SALE_PROFIT_MARGIN,
+            $sale->coffee->profit_margin,
             Sale::SALE_SHIPPING_COST,
         );
 
