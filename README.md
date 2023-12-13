@@ -8,19 +8,22 @@
 </p>
 
 ## Prerequisites
-- PHP
+- PHP 8.1+
 - Composer
-- node
+- npm
 
 ## Installation
 - Clone this repository to your local machine
-- `cp .env.example .env`
-- `composer install`
-- `php artisan key:generate`
-- `php artisan migrate:fresh --seed`
-- `php artisan serve`
-- `npm run dev`
-- Visit http://localhost:8000
-- Login via http://localhost:8000
+- `cp .env.example .env` to create a copy of the .env file
+- `composer install` to install dependencies
+- `php artisan key:generate` to generate an application key
+- `php artisan migrate:fresh --seed` to create and seed the database
+- `php artisan serve` to start the server
+- `npm run dev` to start the frontend
+- Login via http://localhost:8000/login
   - username: sales@coffee.shop
   - password: password
+
+# Features
+- Select a coffee, enter a quantity and unit cost to instantly see the selling price
+- Click 'record sale' to save the sale to the database
