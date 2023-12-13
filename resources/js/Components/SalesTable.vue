@@ -8,7 +8,7 @@ defineProps({
 </script>
 
 <template>
-    <table class="table-auto w-full text-left">
+    <table class="table-auto w-full text-left text-sm sm:text-base">
         <thead>
         <tr>
             <th class="p-3">Product</th>

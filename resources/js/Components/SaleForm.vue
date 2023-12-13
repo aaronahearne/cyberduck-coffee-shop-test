@@ -25,7 +25,6 @@ export default {
             unit_cost: '0.00',
             coffee_id: 0,
         });
-        const processing = ref(false);
         const sellingPrice = ref(0);
 
         const calculateSellingPrice = async () => {
@@ -68,7 +67,6 @@ export default {
 
         return {
             form,
-            processing,
             sellingPrice,
             submit
         };
@@ -78,13 +76,13 @@ export default {
 
 <template>
     <form @submit.prevent="submit">
-        <div class="grid grid-cols-5">
-            <div>
+        <div class="grid xl:grid-cols-5 md:grid-cols-3 grid-cols-1">
+            <div class="my-3">
                 <InputLabel for="product" value="Product"/>
                 <select
                     id="selectOption"
                     v-model="form.coffee_id"
-                    class="mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                    class="mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm sm:w-auto w-full"
                 >
                     <option v-for="coffee in coffees" :key="coffee.name" :value="coffee.id">
                         {{ coffee.name }}
@@ -94,12 +92,12 @@ export default {
                 <InputError class="mt-2" :message="form.errors.coffee_id"/>
             </div>
 
-            <div>
+            <div class="my-3">
                 <InputLabel for="quantity" value="Quantity"/>
                 <TextInput
                     id="quantity"
                     type="number"
-                    class="mt-1 block"
+                    class="mt-1 block sm:w-auto w-full"
                     v-model="form.quantity"
                     min='0'
                     required
@@ -107,12 +105,12 @@ export default {
                 <InputError class="mt-2" :message="form.errors.quantity"/>
             </div>
 
-            <div>
+            <div class="my-3">
                 <InputLabel for="unit_cost" value="Unit Cost (£)"/>
                 <TextInput
                     id="unit_cost"
                     type="number"
-                    class="mt-1 block"
+                    class="mt-1 block sm:w-auto w-full"
                     v-model="form.unit_cost"
                     required
                     step='0.01'
@@ -122,14 +120,14 @@ export default {
                 <InputError class="mt-2" :message="form.errors.unit_cost"/>
             </div>
 
-            <div>
+            <div class="my-3">
                 <InputLabel value="Selling Price"/>
-                <p class="my-2">{{ $filters.currency(sellingPrice) }}</p>
+                <p class="my-2 sm:w-auto w-full">{{ $filters.currency(sellingPrice) }}</p>
             </div>
 
-            <div>
+            <div class="my-3">
                 <PrimaryButton
-                    class="mt-6"
+                    class="mt-6 sm:w-auto w-full"
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing">
                     Record Sale
