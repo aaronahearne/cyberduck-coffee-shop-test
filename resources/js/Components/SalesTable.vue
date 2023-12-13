@@ -19,8 +19,8 @@ defineProps({
         <tbody>
         <tr v-for="sale in sales" class="hover:bg-stone-100">
             <td class="p-3">{{ sale.quantity }}</td>
-            <td class="p-3">{{ sale.unit_cost }}</td>
-            <td class="p-3">{{ sale.selling_price }}</td>
+            <td class="p-3">{{ $filters.currency(sale.unit_cost) }}</td>
+            <td class="p-3">{{ $filters.currency(sale.selling_price) }}</td>
         </tr>
         </tbody>
     </table>

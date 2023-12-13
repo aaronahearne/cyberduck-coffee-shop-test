@@ -29,6 +29,7 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [SaleController::class, 'index'])->name('dashboard');
     Route::post('/sale', [SaleController::class, 'create'])->name('sale.store');
+    Route::post('/sale/calculate', [SaleController::class, 'calculate'])->name('sale.calculate');
 });
 
 Route::middleware('auth')->group(function () {

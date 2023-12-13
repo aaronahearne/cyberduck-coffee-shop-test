@@ -31,6 +31,5 @@ class SaleObserver
             Sale::SALE_PROFIT_MARGIN,
             Sale::SALE_SHIPPING_COST,
         );
-
     }
 }

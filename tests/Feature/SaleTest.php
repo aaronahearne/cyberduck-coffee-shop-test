@@ -10,17 +10,23 @@ class SaleTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_creating_sale(): void
-    {
-        $user = User::factory()->create();
+    private User $user;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->user = User::factory()->create();
+    }
+
+    public function test_can_create_sale(): void
+    {
         $data = [
             'quantity' => 5,
             'unit_cost' => 10,
         ];
 
         $response = $this
-            ->actingAs($user)
+            ->actingAs($this->user)
             ->from('/dashboard')
             ->post(route('sale.store'), $data);
 
@@ -29,6 +35,25 @@ class SaleTest extends TestCase
         $this->assertDatabaseHas('sales', [
             'quantity' => $data['quantity'],
             'unit_cost' => $data['unit_cost'],
+        ]);
+    }
+
+    public function test_can_calculate_sale()
+    {
+        $data = [
+            'quantity' => 5,
+            'unit_cost' => 10,
+        ];
+
+        $response = $this
+            ->actingAs($this->user)
+            ->post(route('sale.calculate'), $data);
+
+        $response->assertStatus(200);
+
+        $response->assertJsonFragment([
+            'cost' => 50,
+            'selling_price' => 76.67,
         ]);
     }
 }
